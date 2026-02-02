@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trò chơi cửa sổ nổi</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Cửa sổ nhập tên người chơi -->
+    <div id="namePopup" class="popup">
+        <p>Nhập tên của bạn:</p>
+        <input type="text" id="playerName" placeholder="Tên người chơi">
+        <button id="startBtn">Bắt đầu</button>
+    </div>
+
+    <!-- Cửa sổ nổi thông báo -->
+    <div id="popup" class="popup" style="display: none;">
+        <p>Chào <span id="playerNameDisplay"></span>! Bạn có đồng ý làm người yêu của mình không?</p>
+        <button id="agreeBtn">Đồng ý</button>
+        <button id="declineBtn">Từ chối</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
