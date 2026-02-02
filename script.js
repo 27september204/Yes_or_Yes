@@ -1,3 +1,20 @@
+const API_URL = "https://script.google.com/macros/s/AKfycbxbjV-BRXO0-__Gkf8YaD6I83ZEmQIf0x5wpZNMUMpCQsH-cJmt3H7GeuVD61oBwFqPjQ/exec";
+
+function sendData(name, action) {
+  fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      name: name,
+      action: action
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    console.log("Saved:", data);
+  })
+  .catch(err => console.error(err));
+}
+
 document.addEventListener("DOMContentLoaded", function() {
     const namePopup = document.getElementById("namePopup");
     const popup = document.getElementById("popup");
@@ -10,67 +27,66 @@ document.addEventListener("DOMContentLoaded", function() {
     // Hiển thị cửa sổ nhập tên người chơi
     namePopup.style.display = "block";
 
-    // Xử lý sự kiện khi bấm bắt đầu (nhập tên)
+    // Xử lý sự kiện khi bấm bắt đầu
     startBtn.addEventListener("click", function() {
         const playerName = playerNameInput.value.trim();
-        
-        // Kiểm tra nếu tên không trống
-        if (playerName) {
-            // Lưu tên vào localStorage
-            localStorage.setItem("playerName", playerName);
 
-            // Hiển thị tên người chơi trong cửa sổ nổi
+        if (playerName) {
+            localStorage.setItem("playerName", playerName);
             playerNameDisplay.textContent = playerName;
 
-            // Ẩn cửa sổ nhập tên và hiển thị cửa sổ thông báo
             namePopup.style.display = "none";
             popup.style.display = "block";
         } else {
-            alert("Vui lòng nhập tên người chơi!");
+            alert("nhập tên của bạn!");
         }
     });
 
-    // Hàm xử lý sự kiện khi bấm Đồng ý
+    // Khi bấm ĐỒNG Ý
     agreeBtn.addEventListener("click", function() {
-        // Hiển thị dòng chúc mừng trong giao diện
+        const playerName = localStorage.getItem("playerName") || "Không tên";
+
+        // GỬI DỮ LIỆU LÊN GOOGLE SHEETS
+        sendData(playerName, "Đồng ý");
+
         const congratMessage = document.createElement("div");
-        congratMessage.textContent = "Chúc mừng bạn đã có được tôi!";
+        congratMessage.textContent = "Vậy Giờ Mình Là Người Yêu Rồi Nhé :)) Nhắn Tin Đi";
         congratMessage.style.position = "fixed";
         congratMessage.style.top = "50%";
         congratMessage.style.left = "50%";
         congratMessage.style.transform = "translate(-50%, -50%)";
         congratMessage.style.fontSize = "24px";
         congratMessage.style.fontWeight = "bold";
-        congratMessage.style.color = "#ff6347"; // Màu sắc đẹp cho chữ
+        congratMessage.style.color = "#ff6347";
         congratMessage.style.padding = "20px";
         congratMessage.style.backgroundColor = "#fff";
         congratMessage.style.borderRadius = "8px";
         congratMessage.style.boxShadow = "0 4px 15px rgba(0, 0, 0, 0.2)";
         document.body.appendChild(congratMessage);
 
-        // Đợi 5 giây trước khi mở liên kết
         setTimeout(function() {
-            window.location.href = "https://www.facebook.com/djpbeat2k4"; // Mở liên kết sau 5 giây
-        }, 5000); // 5000 milliseconds = 5 seconds
+            window.location.href = "https://www.facebook.com/djpbeat2k4";
+        }, 3000);
 
-        popup.style.display = "none"; // Đóng cửa sổ sau khi đồng ý
+        popup.style.display = "none";
     });
 
-    // Hàm xử lý sự kiện khi bấm Từ chối
+    // Khi bấm TỪ CHỐI
     declineBtn.addEventListener("click", function() {
-        // Lấy kích thước màn hình và cửa sổ hiện tại
+        const playerName = localStorage.getItem("playerName") || "Không tên";
+
+        // GỬI DỮ LIỆU LÊN GOOGLE SHEETS
+        sendData(playerName, "Từ chối");
+
         const screenWidth = window.innerWidth;
         const screenHeight = window.innerHeight;
 
-        // Lấy kích thước của cửa sổ nổi
         const popupWidth = popup.offsetWidth;
         const popupHeight = popup.offsetHeight;
 
-        // Tính toán vị trí mới của cửa sổ sao cho nó không ra ngoài màn hình
         const newX = Math.random() * (screenWidth - popupWidth);
         const newY = Math.random() * (screenHeight - popupHeight);
 
-        // Áp dụng vị trí mới cho cửa sổ
         popup.style.left = newX + "px";
         popup.style.top = newY + "px";
     });
